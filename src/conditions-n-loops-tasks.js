@@ -519,8 +519,43 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  const n = str.length;
+  if (n <= 1) return str;
+
+  const seenStates = {};
+  let currentState = str;
+
+  const shuffleOdd = (inputStr) => {
+    let evenChars = '';
+    let oddChars = '';
+
+    for (let i = 0; i < inputStr.length; i += 1) {
+      if (i % 2 === 0) {
+        evenChars += inputStr[i];
+      } else {
+        oddChars += inputStr[i];
+      }
+    }
+
+    return evenChars + oddChars;
+  };
+
+  for (let i = 0; i < iterations; i += 1) {
+    if (seenStates[currentState] !== undefined) {
+      const cycleLength = i - seenStates[currentState];
+      const remainingIterations = (iterations - i) % cycleLength;
+      for (let j = 0; j < remainingIterations; j += 1) {
+        currentState = shuffleOdd(currentState);
+      }
+      return currentState;
+    }
+
+    seenStates[currentState] = i;
+    currentState = shuffleOdd(currentState);
+  }
+
+  return currentState;
 }
 
 /**
@@ -540,10 +575,50 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
-}
+function getNearestBigger(number) {
+  const digits = [];
+  let temp = number;
 
+  while (temp > 0) {
+    digits.unshift(temp % 10);
+    temp = Math.floor(temp / 10);
+  }
+
+  const n = digits.length;
+  let i = n - 2;
+
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i < 0) {
+    return number;
+  }
+
+  let j = n - 1;
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+
+  [digits[i], digits[j]] = [digits[j], digits[i]];
+
+  for (let k = i + 1; k < n - 1; k += 1) {
+    for (let l = i + 1; l < n - k + i; l += 1) {
+      if (digits[l] > digits[l + 1]) {
+        const swapTemp = digits[l];
+        digits[l] = digits[l + 1];
+        digits[l + 1] = swapTemp;
+      }
+    }
+  }
+
+  let result = 0;
+  for (let k = 0; k < n; k += 1) {
+    result = result * 10 + digits[k];
+  }
+
+  return result;
+}
 module.exports = {
   isPositive,
   getMaxNumber,

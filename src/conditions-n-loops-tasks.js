@@ -179,10 +179,62 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
-}
+function convertNumberToString(numberStr) {
+  let result = '';
 
+  function getString(num) {
+    switch (num) {
+      case '1':
+        return 'one';
+
+      case '2':
+        return 'two';
+
+      case '3':
+        return 'three';
+
+      case '4':
+        return 'four';
+
+      case '5':
+        return 'five';
+
+      case '6':
+        return 'six';
+
+      case '7':
+        return 'seven';
+
+      case '8':
+        return 'eight';
+
+      case '9':
+        return 'nine';
+
+      case '.':
+      case ',':
+        return 'point';
+
+      case '-':
+        return 'minus';
+
+      default:
+        return 'zero';
+    }
+  }
+
+  function convert(ind = 0) {
+    result += getString(numberStr[ind]);
+
+    if (ind === numberStr.length - 1) return result;
+
+    result += ' ';
+
+    return convert(ind + 1);
+  }
+
+  return convert();
+}
 /**
  * Determines whether a string is a palindrome.
  * In this task, the use of methods of the String and Array classes is not allowed.
@@ -195,8 +247,14 @@ function convertNumberToString(/* numberStr */) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  const strLength = str.length;
+  for (let i = 0; i < strLength / 2; i += 1) {
+    if (str[i] !== str[strLength - 1 - i]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -213,10 +271,18 @@ function isPalindrome(/* str */) {
  *  'qwerty', 'Q'     => -1
  *  'qwerty', 'p'     => -1
  */
-function getIndexOf(/* str, letter */) {
-  throw new Error('Not implemented');
-}
+function getIndexOf(str, letter) {
+  let ind = -1;
 
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] === letter) {
+      ind = i;
+      break;
+    }
+  }
+
+  return ind;
+}
 /**
  * Checks if a number contains a specific digit.
  * In this task, the use of methods of the String and Array classes is not allowed.
@@ -232,8 +298,23 @@ function getIndexOf(/* str, letter */) {
  *  12345, 0    => false
  *  12345, 6    => false
  */
-function isContainNumber(/* num, digit */) {
-  throw new Error('Not implemented');
+function isContainNumber(num, digit) {
+  let number = Math.abs(num);
+  const digital = Math.abs(digit);
+
+  if (digital > 9) {
+    return false;
+  }
+
+  while (number > 0) {
+    const currentDigit = number % 10;
+    if (currentDigit === digital) {
+      return true;
+    }
+    number = Math.floor(number / 10);
+  }
+
+  return false;
 }
 
 /**
